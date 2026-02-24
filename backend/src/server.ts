@@ -6,6 +6,7 @@ import leaderboardRoutes from "./routes/leaderboard";
 import contactRoutes from "./routes/contact";
 import counterRoutes from "./routes/counter";
 import loginRoutes from "./routes/login";
+import studentsRoutes from "./routes/students";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use("/api/leaderboard", leaderboardRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/counter", counterRoutes);
 app.use("/api/login", loginRoutes);
+app.use("/api/students", studentsRoutes);
 
 // GET /api/leaderboard-summary: top 3 players for landing page widget
 app.get("/api/leaderboard-summary", async (_req, res) => {

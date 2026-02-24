@@ -30,16 +30,16 @@
     </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
-import { useUserStore } from "../stores/user";
+import { useStudentStore } from "@/stores/student";
 
-const userStore = useUserStore();
+const studentStore = useStudentStore();
 
 const form = ref({
-    first_name: userStore.user?.name?.first ?? "",
-    last_name: userStore.user?.name?.last ?? "",
-    email: userStore.user?.email ?? "",
+    first_name: studentStore.student?.name?.first ?? "",
+    last_name: studentStore.student?.name?.last ?? "",
+    email: studentStore.student?.email ?? "",
     message: "",
 });
 
@@ -57,7 +57,7 @@ const submitForm = async () => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                student_id: userStore.user?._id,
+                student_id: (studentStore.student as any)?._id,
                 first_name: form.value.first_name,
                 last_name: form.value.last_name,
                 email: form.value.email,
@@ -73,8 +73,8 @@ const submitForm = async () => {
 
         success.value = true;
         form.value.message = "";
-    } catch (err) {
-        error.value = err.message;
+    } catch (e: any) {
+        error.value = e.message;
     } finally {
         loading.value = false;
     }

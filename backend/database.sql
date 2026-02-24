@@ -14,11 +14,11 @@ CREATE TABLE IF NOT EXISTS leaderboard (
 );
 
 INSERT INTO leaderboard (name, score) VALUES
-('Spencer', 9800),
-('Nick',    7500),
-('Raf',     6200),
-('Player4', 4100),
-('Player5', 3300);
+('Vini', 9800),
+('Cris', 7500),
+('Julian2', 6200),
+('Vi', 4100),
+('Nick', 3300);
 
 -- ------------------------------------------------------------
 -- Contacts table  (saved from the Contact page form)

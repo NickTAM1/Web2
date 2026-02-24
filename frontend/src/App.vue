@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useUserStore } from '@/stores/user';
+import { useStudentStore } from '@/stores/student';
 import { useRouter } from 'vue-router';
 
-const userStore = useUserStore();
+const studentStore = useStudentStore();
 const router = useRouter();
 
 function logout() {
-  userStore.clearUser();
+  studentStore.clearStudent();
   router.push('/login');
 }
 </script>
@@ -19,9 +19,9 @@ function logout() {
 			<router-link to="/about">About</router-link>
 			<router-link to="/contact">Contact</router-link>
 			<router-link to="/leaderboard">Leaderboard</router-link>
-			<router-link v-if="!userStore.user" to="/login">Login</router-link>
+			<router-link v-if="!studentStore.student" to="/login">Login</router-link>
 			<span v-else class="user-info">
-				Welcome, {{ userStore.user.name.first }} {{ userStore.user.name.last }}
+				Welcome, {{ studentStore.student.name.first }} {{ studentStore.student.name.last }}
 				<button @click="logout">Logout</button>
 			</span>
 		</nav>

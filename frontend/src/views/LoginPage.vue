@@ -19,13 +19,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useUserStore } from '@/stores/user';
+import { useStudentStore } from '@/stores/student';
 
 const lastName = ref('');
 const email = ref('');
 const error = ref('');
 const router = useRouter();
-const userStore = useUserStore();
+const studentStore = useStudentStore();
 
 const handleLogin = async () => {
   error.value = '';
@@ -38,11 +38,11 @@ const handleLogin = async () => {
       throw new Error(errorData.error || 'Login failed. Please try again.');
     }
 
-    const userData = await response.json();
-    userStore.setUser(userData);
+    const data = await response.json();
+    studentStore.setStudent(data);
     router.push('/leaderboard');
-  } catch (err: any) {
-    error.value = err.message;
+  } catch (e: any) {
+    error.value = e.message;
   }
 };
 </script>

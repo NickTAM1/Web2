@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "predev": "ts-node src/scripts/seedAndTest.ts",
     "dev": "nodemon --watch src --exec ts-node src/server.ts",
-    "test": "ts-node src/scripts/seedAndTest.ts"
+    "seed": "ts-node src/scripts/seedAndTest.ts"
   },
   "keywords": [],
   "author": "",
