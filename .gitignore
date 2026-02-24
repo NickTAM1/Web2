@@ -430,3 +430,6 @@ backend/node_modules/
 # Vue / Vite
 dist/
 *.local
+
+# .env files
+*.env
