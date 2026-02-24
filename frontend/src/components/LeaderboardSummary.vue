@@ -33,7 +33,7 @@
     // Fetch leaderboard data 
     async function fetchleaderboardData() {
         try{
-            const res = await fetch('/api/loaderboard-summary');
+            const res = await fetch('/api/leaderboard-summary'); // Corrected endpoint
             if(!res.ok){
                 throw new Error(`HTTP error! status: ${res.status}`);
             }

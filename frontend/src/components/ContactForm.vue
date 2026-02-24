@@ -1,67 +1,74 @@
 <template>
-    <form class="contact-form" @submit.prevent="handleSubmit">
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" id="name" v-model="formData.name" required />
-        </div>
-        <div class="form-group">
+    <form @submit.prevent="submitForm">
+        <div v-if="loading">Submitting...</div>
+        <div v-else>
+            <div v-if="error" class="error">Error: {{ error }}</div>
+            <div v-if="success" class="success">Message sent successfully!</div>
+
+            <label for="first_name">First Name:</label>
+            <input id="first_name" v-model="form.first_name" required />
+
+            <label for="last_name">Last Name:</label>
+            <input id="last_name" v-model="form.last_name" required />
+
+            <label for="email">Email:</label>
+            <input id="email" type="email" v-model="form.email" required />
+
             <label for="message">Message:</label>
-            <textarea id="message" v-model="formData.message" rows="4" required></textarea>
+            <textarea id="message" v-model="form.message" required></textarea>
+
+            <button type="submit">Send</button>
         </div>
-        <button type="submit">Submit</button>
-        <p v-if="submitted" class="success">Thank you for your message!</p>
     </form>
 </template>
 
-<script setup lang="ts">
-    import { ref } from 'vue';
+<script setup>
+import { ref } from "vue";
 
-    const formData = ref({
-        name: '',
-        message: ''
-    });
+const form = ref({
+    first_name: "",
+    last_name: "",
+    email: "",
+    message: "",
+});
+const loading = ref(false);
+const error = ref(null);
+const success = ref(false);
 
-    const submitted = ref(false);
+const submitForm = async () => {
+    loading.value = true;
+    error.value = null;
+    success.value = false;
 
-    // Handle form submission
-    function handleSubmit() {
-        console.log('Form submitted:', formData.value);
-        submitted.value = true;
-        // Reset form
-        formData.value = { name: '', message: '' };
+    try {
+        const response = await fetch("/api/contact", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(form.value),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to submit the form");
+        }
+
+        success.value = true;
+        form.value = { first_name: "", last_name: "", email: "", message: "" };
+    } catch (err) {
+        error.value = err.message;
+    } finally {
+        loading.value = false;
     }
+};
 </script>
 
 <style scoped>
-    .contact-form {
-        max-width: 400px;
-        margin: 0 auto;
-        text-align: left;
-    }
+.error {
+    color: red;
+}
 
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    input, textarea {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-
-    button {
-        padding: 10px 20px;
-        cursor: pointer;
-    }
-
-    .success {
-        color: green;
-        margin-top: 10px;
-    }
+.success {
+    color: green;
+}
 </style>

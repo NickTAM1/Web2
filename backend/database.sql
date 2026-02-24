@@ -1,17 +1,43 @@
+-- This SQL script sets up the database for the leaderboard application.
 -- Create the database
 CREATE DATABASE IF NOT EXISTS leaderboard_db;
 USE leaderboard_db;
 
--- Create the leaderboard table
+-- ------------------------------------------------------------
+-- Leaderboard table
+-- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS leaderboard (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    score INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    name       VARCHAR(255) NOT NULL,
+    score      INT          NOT NULL,
+    created_at TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
 );
 
--- Insert sample data
 INSERT INTO leaderboard (name, score) VALUES
-('Player1', 100),
-('Player2', 200),
-('Player3', 150);
+('Spencer', 9800),
+('Nick',    7500),
+('Raf',     6200),
+('Player4', 4100),
+('Player5', 3300);
+
+-- ------------------------------------------------------------
+-- Contacts table  (saved from the Contact page form)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS contacts (
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(255) NOT NULL,
+    last_name  VARCHAR(255) NOT NULL,
+    email      VARCHAR(255) NOT NULL,
+    message    TEXT         NOT NULL,
+    created_at TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ------------------------------------------------------------
+-- Counter table  (single global counter, starts at 0)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS counter (
+    id    INT PRIMARY KEY DEFAULT 1,
+    count INT NOT NULL    DEFAULT 0
+);
+
+INSERT INTO counter (id, count) VALUES (1, 0);

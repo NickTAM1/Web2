@@ -1,74 +1,50 @@
 <template>
-    <div class="leaderboard-table">
-        <h2>Leaderboard Table</h2>
-        <table>
+    <div>
+        <div v-if="leaderboardStore.loading">Loading...</div>
+        <div v-else-if="leaderboardStore.error">Error: {{ leaderboardStore.error }}</div>
+        <table v-else>
             <thead>
                 <tr>
+                    <th>Rank</th>
                     <th>Player</th>
                     <th>Score</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in LeaderboardData" :key="index">
-                    <td>{{ item.player }}</td>
-                    <td>{{ item.score }}</td>
+                <tr v-for="(entry, index) in leaderboardStore.entries" :key="entry.id">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ entry.name }}</td>
+                    <td>{{ entry.score }}</td>
                 </tr>
             </tbody>
         </table>
-        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     </div>
 </template>
 
 <script setup lang="ts">
-    import { onMounted, ref } from 'vue';
+import { onMounted } from "vue";
+import { useLeaderboardStore } from "@/stores/leaderboard";
 
-    type LeaderboardItem = {
-        player: string;
-        score: number;
-    };
+const leaderboardStore = useLeaderboardStore();
 
-    const LeaderboardData = ref<LeaderboardItem[]>([]);
-    const errorMessage = ref("");
-
-    async function fetchLeaderboardData() {
-        try {
-            const res = await fetch('http://localhost:3000/api/leaderboard');
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            const data = (await res.json()) as LeaderboardItem[];
-            LeaderboardData.value = data;
-        } catch (err: any) {
-            errorMessage.value = err?.message ?? 'Unknown error occurred';
-        }
-    }
-
-    onMounted(() => {
-        fetchLeaderboardData();
-    });
+onMounted(() => {
+    leaderboardStore.fetchEntries();
+});
 </script>
 
 <style scoped>
-    .leaderboard-table {
-        text-align: center;
-        margin-top: 20px;
-    }
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-    table {
-        margin: 0 auto;
-        border-collapse: collapse;
-    }
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
 
-    th, td {
-        border: 1px solid #ccc;
-        padding: 8px 16px;
-    }
-
-    th {
-        background-color: #f0f0f0;
-    }
-
-    .error {
-        color: red;
-    }
+th {
+    background-color: #f4f4f4;
+    text-align: left;
+}
 </style>

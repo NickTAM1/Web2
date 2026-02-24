@@ -1,22 +1,26 @@
 import { Router } from "express";
-import { Student } from "../models/Student";
+import { User } from "../models/Contact";
 
 const router = Router();
 
-// GET /api/login: Retrieve user information by email or name
-router.get("/", async (req, res) => {
-    const { email, name } = req.query;
+// POST /api/login: Retrieve user information by email and/or name
+router.post("/", async (req, res) => {
+    const { email, firstName, lastName, name } = req.body;
+    // support both { email, firstName, lastName } and { name: { last }, email }
+    const resolvedLastName = lastName || name?.last;
+    const resolvedFirstName = firstName || name?.first;
 
-    if (!email && !name) {
-        return res.status(400).json({ error: "Email or name is required." });
+    if (!email && !resolvedFirstName && !resolvedLastName) {
+        return res.status(400).json({ error: "Email, first name, or last name is required." });
     }
 
     try {
         const query: any = {};
         if (email) query.email = email;
-        if (name) query["name.first"] = name;
+        if (resolvedFirstName) query["name.first"] = resolvedFirstName;
+        if (resolvedLastName) query["name.last"] = resolvedLastName;
 
-        const user = await Student.findOne(query);
+        const user = await User.findOne(query);
         if (!user) {
             return res.status(404).json({ error: "User not found." });
         }

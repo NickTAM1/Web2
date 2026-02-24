@@ -1,19 +1,30 @@
 import { Router } from "express";
-import { Contact } from "../models/Contact";
+import { connectMySQLDb } from "../db";
 
 const router = Router();
 
-// POST /api/contact: Store contact inquiries in MongoDB
-router.post("/", async (req, res) => {
-    const { name, email, message } = req.body;
+const dbConfig = () => ({
+    host: process.env.MYSQL_HOST || "localhost",
+    user: process.env.MYSQL_USER || "root",
+    password: process.env.MYSQL_PASSWORD || "",
+    database: process.env.MYSQL_DATABASE || "leaderboard_db"
+});
 
-    if (!name || !email || !message) {
-        return res.status(400).json({ error: "Name, email, and message are required." });
+// POST /api/contact: Save contact form to MySQL
+router.post("/", async (req, res) => {
+    const { first_name, last_name, email, message } = req.body;
+
+    if (!first_name || !last_name || !email || !message) {
+        return res.status(400).json({ error: "First name, last name, email, and message are required." });
     }
 
     try {
-        const contact = new Contact({ name, email, message });
-        await contact.save();
+        const connection = await connectMySQLDb(dbConfig());
+        await connection.execute(
+            "INSERT INTO contacts (first_name, last_name, email, message) VALUES (?, ?, ?, ?)",
+            [first_name, last_name, email, message]
+        );
+        await connection.end();
         res.status(201).json({ message: "Contact inquiry saved successfully." });
     } catch (err: any) {
         res.status(500).json({ error: err.message });

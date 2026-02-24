@@ -1,49 +1,81 @@
 import { Router } from "express";
-import { Course } from "../models/Course";
+import { pool } from "../db";
 
 const router = Router();
 
-router.post("/", async (req, res) => {
+// GET all courses
+router.get("/", async (_req, res) => {
     try {
-        const created = await Course.create(req.body);
-        res.status(201).json(created);
+        const [rows] = await pool.execute(
+            "SELECT * FROM courses ORDER BY unique_code"
+        );
+        res.json(rows);
     } catch (err: any) {
-        res.status(400).json({ error: err.message });
+        res.status(500).json({ error: err.message });
     }
 });
 
-router.get("/", async (req, res) => {
-    const courses = await Course.find({}).sort({ courseCode: 1 });
-    res.json(courses);
-});
-
+// GET course by course_id
 router.get("/:id", async (req, res) => {
     try {
-        const course = await Course.findById(req.params.id);
-        if (!course) return res.status(404).json({ error: "Course not found" });
-        res.json(course);
+        const [rows]: any = await pool.execute(
+            "SELECT * FROM courses WHERE course_id = ?",
+            [req.params.id]
+        );
+        if (!rows.length) return res.status(404).json({ error: "Course not found" });
+        res.json(rows[0]);
     } catch (err: any) {
         res.status(400).json({ error: err.message });
     }
 });
 
+// POST create course
+router.post("/", async (req, res) => {
+    try {
+        const { unique_code, title, credits } = req.body;
+        const [result]: any = await pool.execute(
+            "INSERT INTO courses (unique_code, title, credits) VALUES (?, ?, ?)",
+            [unique_code, title, credits]
+        );
+        const [rows]: any = await pool.execute(
+            "SELECT * FROM courses WHERE course_id = ?",
+            [result.insertId]
+        );
+        res.status(201).json(rows[0]);
+    } catch (err: any) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+// PUT update course
 router.put("/:id", async (req, res) => {
     try {
-        const updated = await Course.findByIdAndUpdate(req.params.id, req.body, {
-            runValidators: true
-        });
-        if (!updated) return res.status(404).json({ error: "Course not found or not updated" });
-        res.json(updated);
+        const { unique_code, title, credits } = req.body;
+        const [result]: any = await pool.execute(
+            "UPDATE courses SET unique_code = ?, title = ?, credits = ? WHERE course_id = ?",
+            [unique_code, title, credits, req.params.id]
+        );
+        if (!result.affectedRows) return res.status(404).json({ error: "Course not found" });
+        const [rows]: any = await pool.execute(
+            "SELECT * FROM courses WHERE course_id = ?",
+            [req.params.id]
+        );
+        res.json(rows[0]);
     } catch (err: any) {
         res.status(400).json({ error: err.message });
     }
 });
 
+// DELETE course
 router.delete("/:id", async (req, res) => {
     try {
-        const deleted = await Course.findByIdAndDelete(req.params.id);
-        if (!deleted) return res.status(404).json({ error: "Course not found or not deleted" });
-        res.json(deleted);
+        const [rows]: any = await pool.execute(
+            "SELECT * FROM courses WHERE course_id = ?",
+            [req.params.id]
+        );
+        if (!rows.length) return res.status(404).json({ error: "Course not found" });
+        await pool.execute("DELETE FROM courses WHERE course_id = ?", [req.params.id]);
+        res.json(rows[0]);
     } catch (err: any) {
         res.status(400).json({ error: err.message });
     }
