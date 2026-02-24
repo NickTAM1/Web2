@@ -36,8 +36,10 @@ npm run dev
 5. Login
 
 Use Last name and email for login
+```bash
 Last name: Root 
 Email: test.root@gmail.com
+```
 
 6. Contact
 
