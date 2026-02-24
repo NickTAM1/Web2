@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
@@ -28,14 +28,10 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const handleLogin = async () => {
+  error.value = '';
   try {
-    const response = await fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name: { last: lastName.value }, email: email.value }),
-    });
+    const params = new URLSearchParams({ email: email.value, lastName: lastName.value });
+    const response = await fetch(`/api/login?${params.toString()}`);
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -45,7 +41,7 @@ const handleLogin = async () => {
     const userData = await response.json();
     userStore.setUser(userData);
     router.push('/leaderboard');
-  } catch (err) {
+  } catch (err: any) {
     error.value = err.message;
   }
 };

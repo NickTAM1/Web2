@@ -24,10 +24,10 @@ app.use("/api/login", loginRoutes);
 app.get("/api/leaderboard-summary", async (_req, res) => {
     try {
         const connection = await connectMySQLDb({
-            host: process.env.MYSQL_HOST || "localhost",
-            user: process.env.MYSQL_USER || "root",
-            password: process.env.MYSQL_PASSWORD || "",
-            database: process.env.MYSQL_DATABASE || "leaderboard_db"
+            host: process.env.DB_HOST || "localhost",
+            user: process.env.DB_USER || "root",
+            password: process.env.DB_PASSWORD || "",
+            database: process.env.DB_DATABASE || "leaderboard_db"
         });
         const [rows] = await connection.execute(
             "SELECT name AS player, score FROM leaderboard ORDER BY score DESC LIMIT 3"

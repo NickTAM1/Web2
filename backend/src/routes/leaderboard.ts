@@ -7,10 +7,10 @@ const router = Router();
 router.get("/", async (req, res) => {
     try {
         const connection = await connectMySQLDb({
-            host: process.env.MYSQL_HOST || "localhost",
-            user: process.env.MYSQL_USER || "root",
-            password: process.env.MYSQL_PASSWORD || "",
-            database: process.env.MYSQL_DATABASE || "leaderboard_db"
+            host: process.env.DB_HOST || "localhost",
+            user: process.env.DB_USER || "root",
+            password: process.env.DB_PASSWORD || "",
+            database: process.env.DB_DATABASE || "leaderboard_db"
         });
 
         const [rows] = await connection.execute("SELECT * FROM leaderboard ORDER BY score DESC");
@@ -31,10 +31,10 @@ router.post("/", async (req, res) => {
 
     try {
         const connection = await connectMySQLDb({
-            host: process.env.MYSQL_HOST || "localhost",
-            user: process.env.MYSQL_USER || "root",
-            password: process.env.MYSQL_PASSWORD || "",
-            database: process.env.MYSQL_DATABASE || "leaderboard_db"
+            host: process.env.DB_HOST || "localhost",
+            user: process.env.DB_USER || "root",
+            password: process.env.DB_PASSWORD || "",
+            database: process.env.DB_DATABASE || "leaderboard_db"
         });
         const [result]: any = await connection.execute(
             "INSERT INTO leaderboard (name, score) VALUES (?, ?)",

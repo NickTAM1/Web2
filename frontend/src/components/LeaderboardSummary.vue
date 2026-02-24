@@ -1,7 +1,9 @@
 <template>
     <div class="Leaderboard-summary">
         <h2>Leaderboard Summary</h2>
-        <table>
+        <div v-if="leaderboardStore.loading">Loading...</div>
+        <div v-else-if="leaderboardStore.error" class="error">{{ leaderboardStore.error }}</div>
+        <table v-else>
             <thead>
                 <tr>
                     <th>Player</th>
@@ -9,46 +11,26 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in LeaderboardData" :key="index">
-                    <td>{{ item.player }}</td>
-                    <td>{{ item.score }}</td>
+                <tr v-for="(entry, index) in leaderboardStore.topThree" :key="index">
+                    <td>{{ entry.name }}</td>
+                    <td>{{ entry.score }}</td>
                 </tr>
             </tbody>
-        </table>  
-        <p v-if="errorMessage" class="error">{{ errorMessage }} </p>  
+        </table>
     </div>
-</template>   
+</template>
 
 <script setup lang="ts">
-    import { onMounted, ref } from 'vue';
+    import { onMounted } from 'vue';
+    import { useLeaderboardStore } from '@/stores/leaderboard';
 
-    type LeaderboardItem = {
-        player: string;
-        score: number;
-    }
-
-    const LeaderboardData = ref<LeaderboardItem[]>([]);
-    const errorMessage = ref("");
-
-    // Fetch leaderboard data 
-    async function fetchleaderboardData() {
-        try{
-            const res = await fetch('/api/leaderboard-summary'); // Corrected endpoint
-            if(!res.ok){
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            const data = (await res.json()) as LeaderboardItem[];
-            LeaderboardData.value = data;
-        } 
-        catch (err: any) {
-            errorMessage.value = err?.message ?? 'Unknown error occurred';
-        }
-    }
+    const leaderboardStore = useLeaderboardStore();
 
     onMounted(() => {
-        fetchleaderboardData();
+        if (leaderboardStore.entries.length === 0) {
+            leaderboardStore.fetchEntries();
+        }
     });
-
 </script>
 
 <style scoped>
@@ -68,5 +50,4 @@
     .error {
         color: rebeccapurple;
     }
-    
 </style>

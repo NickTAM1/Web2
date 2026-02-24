@@ -12,6 +12,9 @@ export const useLeaderboardStore = defineStore("leaderboard", {
     loading: false,
     error: null as string | null,
   }),
+  getters: {
+    topThree: (state): LeaderboardEntry[] => state.entries.slice(0, 3),
+  },
   actions: {
     async fetchEntries() {
       this.loading = true;
