@@ -15,10 +15,25 @@ async function main() {
 
     // Seed students directly into MongoDB
     const studentsToAdd = [
-        { studentId: "VINI3", name: { first: "Vini",  last: "Cius"  }, grade: 10, email: "vini@cius.br"          },
-        { studentId: "JOHN1", name: { first: "John",  last: "Doe"   }, grade: 9,  email: "john.doe@example.com"  },
-        { studentId: "JANE2", name: { first: "Jane",  last: "Smith" }, grade: 8,  email: "jane.smith@example.com"},
-        { studentId: "STU001", name: { first: "Nick",  last: "Test"  }, grade: 10, email: "nick@gmail.com"        }
+        { studentId: "VINI3",
+          name: { first: "Vini",  last: "Cius"  }, 
+          grade: 10, 
+          email: "vini@cius.br" 
+        },
+        
+        { studentId: "NICK3", 
+            name: { first: "Nick",  last: "Test"  }, 
+            grade: 10, 
+            email: "nick@gmail.com"        
+        },
+
+        { studentId: "TEST3",
+            name: { first: "Test",  last: "Root"  },
+            grade: 10,
+            email: "test.root@gmail.com"
+        }
+
+
     ];
 
     for (const data of studentsToAdd) {

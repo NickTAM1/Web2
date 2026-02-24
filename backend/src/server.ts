@@ -14,7 +14,7 @@ const app = express();
 
 app.use(express.json());
 
-app.get("/", (_req, res) => res.json({ ok: true, service: "leaderboard-api" }));
+app.get("/", (req, res) => res.json({ ok: true, service: "school-api" }));
 
 app.use("/api/leaderboard", leaderboardRoutes);
 app.use("/api/contact", contactRoutes);
@@ -23,13 +23,13 @@ app.use("/api/login", loginRoutes);
 app.use("/api/students", studentsRoutes);
 
 // GET /api/leaderboard-summary: top 3 players for landing page widget
-app.get("/api/leaderboard-summary", async (_req, res) => {
+app.get("/api/leaderboard-summary", async (req, res) => {
     try {
         const connection = await connectMySQLDb({
-            host: process.env.DB_HOST || "localhost",
-            user: process.env.DB_USER || "root",
-            password: process.env.DB_PASSWORD || "",
-            database: process.env.DB_DATABASE || "leaderboard_db"
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_DATABASE
         });
         const [rows] = await connection.execute(
             "SELECT name AS player, score FROM leaderboard ORDER BY score DESC LIMIT 3"
@@ -44,7 +44,7 @@ app.get("/api/leaderboard-summary", async (_req, res) => {
 async function start() {
     try {
         await connectDb(process.env.MONGODB_URI);
-        const port = Number(process.env.PORT) || 3000;
+        const port = Number(process.env.PORT);
         app.listen(port, () => console.log(`Listening on http://localhost:${port}`));
     } catch (err: any) {
         console.error("Startup error", err?.message);

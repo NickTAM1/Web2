@@ -3,7 +3,7 @@ Web App HW2
 Setup
 
 1. MySQL
-Run `backend/database.sql` in MySQL Workbench to create the database and tables.
+Run `backend/database.sql` in MySQL Workbench to create the database and tables.(Copy all stuff from database.sql and execute on MySql workbench)
 
 2. Create `backend/.env`
 
@@ -20,14 +20,27 @@ DB_DATABASE=leaderboard_db
 
 3. Backend
 
+```bash
 cd backend
 npm install
 npm run dev
-
+```
 
 4. Frontend
 
+```bash
 cd frontend
 npm install
 npm run dev
+```
 
+5. Login
+
+Use Last name and email for login
+Last name: Root 
+Email: test.root@gmail.com
+
+6. Contact
+
+Need first and last name
+Type some content and sumbit

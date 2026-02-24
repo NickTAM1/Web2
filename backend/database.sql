@@ -3,9 +3,8 @@
 CREATE DATABASE IF NOT EXISTS leaderboard_db;
 USE leaderboard_db;
 
--- ------------------------------------------------------------
+
 -- Leaderboard table
--- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS leaderboard (
     id         INT AUTO_INCREMENT PRIMARY KEY,
     name       VARCHAR(255) NOT NULL,
@@ -20,9 +19,8 @@ INSERT INTO leaderboard (name, score) VALUES
 ('Vi', 4100),
 ('Nick', 3300);
 
--- ------------------------------------------------------------
+
 -- Contacts table  (saved from the Contact page form)
--- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS contacts (
     id         INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
@@ -32,9 +30,8 @@ CREATE TABLE IF NOT EXISTS contacts (
     created_at TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
 );
 
--- ------------------------------------------------------------
+
 -- Counter table  (single global counter, starts at 0)
--- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS counter (
     id    INT PRIMARY KEY DEFAULT 1,
     count INT NOT NULL    DEFAULT 0
