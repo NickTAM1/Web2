@@ -8,13 +8,12 @@ Run `backend/database.sql` in MySQL Workbench to create the database and tables.
 2. Create `backend/.env`
 
 ```bash
-.env
 MONGODB_URI=mongodb+srv://spencer:spencer@spencer.jw3h8fw.mongodb.net/leaderboardUsers?appName=Spencer
 PORT=3000
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
-DB_PASSWORD=your_mysql_password
+DB_PASSWORD=spencer
 DB_DATABASE=leaderboard_db
 ```
 
@@ -44,3 +43,7 @@ Email: test.root@gmail.com
 
 Need first and last name
 Type some content and sumbit
+
+7. Github
+
+Link: 
