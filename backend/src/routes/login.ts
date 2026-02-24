@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { User } from "../models/Contact";
+import { Student } from "../models/Contact";
 
 const router = Router();
 
-// POST /api/login: Retrieve user information by email and/or name
+// POST /api/login: Retrieve student information by email and/or name
 router.post("/", async (req, res) => {
     const { email, firstName, lastName, name } = req.body;
     // support both { email, firstName, lastName } and { name: { last }, email }
@@ -20,12 +20,12 @@ router.post("/", async (req, res) => {
         if (resolvedFirstName) query["name.first"] = resolvedFirstName;
         if (resolvedLastName) query["name.last"] = resolvedLastName;
 
-        const user = await User.findOne(query);
-        if (!user) {
-            return res.status(404).json({ error: "User not found." });
+        const student = await Student.findOne(query);
+        if (!student) {
+            return res.status(404).json({ error: "Student not found." });
         }
 
-        res.json(user);
+        res.json(student);
     } catch (err: any) {
         res.status(500).json({ error: err.message });
     }

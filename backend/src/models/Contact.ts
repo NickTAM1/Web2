@@ -1,22 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export interface IContact extends Document {
-    name: string;
-    email: string;
-    message: string;
-    createdAt: Date;
-}
-
-const ContactSchema: Schema = new Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true },
-    message: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now }
-});
-
-export const Contact = mongoose.model<IContact>("Contact", ContactSchema);
-
-export interface IUser extends Document {
+export interface IStudent extends Document {
     name: {
         first: string;
         last: string;
@@ -28,7 +12,7 @@ export interface IUser extends Document {
     updatedAt: Date;
 }
 
-const UserSchema: Schema = new Schema({
+const StudentSchema: Schema = new Schema({
     name: {
         first: { type: String, required: true },
         last: { type: String, required: true }
@@ -40,4 +24,24 @@ const UserSchema: Schema = new Schema({
     updatedAt: { type: Date, default: Date.now }
 });
 
-export const User = mongoose.model<IUser>("User", UserSchema);
+export const Student = mongoose.model<IStudent>("Student", StudentSchema);
+
+export interface IContact extends Document {
+    student_id: mongoose.Types.ObjectId;
+    first_name: string;
+    last_name: string;
+    email: string;
+    message: string;
+    createdAt: Date;
+}
+
+const ContactSchema: Schema = new Schema({
+    student_id: { type: Schema.Types.ObjectId, ref: "Student", required: false },
+    first_name: { type: String, required: true },
+    last_name: { type: String, required: true },
+    email: { type: String, required: true },
+    message: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now }
+});
+
+export const Contact = mongoose.model<IContact>("Contact", ContactSchema);
